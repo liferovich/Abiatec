@@ -1,0 +1,20 @@
+.Button2 {
+  background: #767676;
+  border-radius: 0.25rem;
+  outline: 0;
+  border: 0;
+  color: #fff;
+  transition: background-color 100ms ease-in-out;
+  cursor: pointer;
+  padding: 15px 25px;
+  height: auto;
+  font-size: 18px;
+}
+
+.Button2:hover {
+  background: #767676c0;
+}
+
+.LoadMore {
+  margin-bottom: 30px;
+}

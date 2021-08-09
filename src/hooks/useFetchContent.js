@@ -1,17 +1,75 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const useFetchContent = () => {
-  const [imgList, setImgList] = useState([]);
-  console.log("OK");
+  const [content, setContent] = useState([]);
+  const [next, setNext] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetched, setIsFetched] = useState(false);
   const apiUrl = "https://rickandmortyapi.com/api/character/";
-  const fetch = useCallback(async () => {
-    /* TODO: fetch images from this url: https://rickandmortyapi.com/api/character/
-      (to fetch with name add name in search query: https://rickandmortyapi.com/api/character/?name=rick)
-    */
-    //   setImgList([])
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((result) => {
+        setContent(result.results);
+        setNext(result.info.next);
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
-  // TODO: Put fetchMore method here
+  const handleSearch = useCallback((name) => {
+    setIsLoading(true);
+    fetch(apiUrl + "?name=" + name)
+      .then((response) => response.json())
+      .then((result) => {
+        setContent(result.results);
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
-  return [imgList, fetch];
+  // useEffect(() => {
+  //   fetch(next)
+  //   .then((response) => response.json())
+  //   .then((result) => {
+  //     setContent((prevState) => [...prevState, ...result.results]);
+  //     setNext(result.info.next);
+  //   })
+  //   .catch((e) => {
+  //     console.log(e);
+  //   })
+  //   .finally(() => {
+  //     setIsLoading(false);
+  //     // setIsFetched(true)
+  //   });
+  // }, [next]);
+
+  const fetchMore = useCallback(() => {
+    setIsLoading(true);
+    fetch(next)
+      .then((response) => response.json())
+      .then((result) => {
+        setContent((prevState) => [...prevState, ...result.results]);
+        setNext(result.info.next);
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        // setIsFetched(true)
+      });
+  }, [next]);
+
+  return { handleSearch, content, isLoading, fetchMore, isFetched };
 };

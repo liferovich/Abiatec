@@ -1,0 +1,17 @@
+.userList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.user {
+  padding: 10px;
+  margin: 10px;
+}
+.user-img img {
+  height: 300px;
+  width: auto;
+}
+h4 {
+  font-size: 22px;
+  margin: 20px 0;
+}
